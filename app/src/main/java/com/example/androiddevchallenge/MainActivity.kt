@@ -18,6 +18,7 @@ package com.example.androiddevchallenge
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,24 +31,28 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.example.androiddevchallenge.model.Dog
-import com.example.androiddevchallenge.model.getPets
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 class MainActivity : AppCompatActivity() {
-    //    val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                List(getPets(), onClick = { dog -> toDetail(dog) })
+                List(viewModel.dogsLiveData, onItemClick = { dog -> toDetail(dog) })
             }
         }
+        viewModel.readData()
     }
 
     private fun toDetail(dog: Dog) {
@@ -61,27 +66,30 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 @Preview
-fun List(list: List<Dog>, onClick: (dog: Dog) -> Unit) {
+fun List(dogsLiveData: LiveData<List<Dog>>, onItemClick: (dog: Dog) -> Unit) {
     Column(Modifier.background(color = White)) {
         TopAppBar(title = {
             Text("PetHome")
         })
         PetList(
-            list,
-            onClick
+            dogsLiveData,
+            onItemClick
         )
     }
 }
 
 @Composable
-fun PetList(pets: List<Dog>, onClick: (dog: Dog) -> Unit) {
-    LazyColumn(
-        Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-    ) {
-        items(pets) { dog ->
-            PetCard(dog, onClick)
+fun PetList(dogsLiveData: LiveData<List<Dog>>, onClick: (dog: Dog) -> Unit) {
+    val pets by dogsLiveData.observeAsState()
+    pets?.let {
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            items(it) { dog ->
+                PetCard(dog, onClick)
+            }
         }
     }
 }
