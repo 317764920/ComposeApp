@@ -29,8 +29,8 @@ buildscript {
 //        maven {
 //            url 'https://maven.aliyun.com/repository/central/'
 //        }
-        mavenCentral()
         google()
+        jcenter()
     }
 
     dependencies {
@@ -54,8 +54,8 @@ subprojects {
 //        maven {
 //            url 'https://maven.aliyun.com/repository/central/'
 //        }
-        mavenCentral()
         google()
+        jcenter()
     }
 
     apply plugin: 'com.diffplug.spotless'
