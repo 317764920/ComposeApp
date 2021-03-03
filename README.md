@@ -7,11 +7,14 @@
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
+This is a #AndroidDevChallenge
+
 
 
 ## :bulb: Motivation and Context
 <!--- Optionally point readers to interesting parts of your submission. -->
 <!--- What are you especially proud of? -->
+My first experience for Jetpack compose!!!
 
 
 ## :camera_flash: Screenshots
